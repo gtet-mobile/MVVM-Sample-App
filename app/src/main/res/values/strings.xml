@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MvvmSampleApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="user_fragment">User Fragment</string>
+    <string name="user_detail_fragment">User Detail Fragment</string>
+    <string name="back">Back</string>
+</resources>
