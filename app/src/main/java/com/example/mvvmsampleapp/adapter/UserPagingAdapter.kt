@@ -18,11 +18,12 @@ import com.example.mvvmsampleapp.utils.hide
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import androidx.recyclerview.widget.DiffUtil
+import com.example.mvvmsampleapp.model.Data
 
 
 class UserPagingAdapter(
-    private val onItemClicked: (UserEntity) -> Unit
-) : PagingDataAdapter<UserEntity, UserPagingAdapter.UserViewHolder>(MyDiffCallback()) {
+    private val onItemClicked: (Data) -> Unit
+) : PagingDataAdapter<Data, UserPagingAdapter.UserViewHolder>(MyDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -52,7 +53,7 @@ class UserPagingAdapter(
         }
 
         @SuppressLint("CheckResult")
-        fun bind(user: UserEntity) {
+        fun bind(user: Data) {
             binding.item = user
 
             val requestOptions = RequestOptions()
@@ -91,12 +92,12 @@ class UserPagingAdapter(
     }
 }
 
-class MyDiffCallback : DiffUtil.ItemCallback<UserEntity>() {
-    override fun areItemsTheSame(oldItem: UserEntity, newItem: UserEntity): Boolean {
+class MyDiffCallback : DiffUtil.ItemCallback<Data>() {
+    override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: UserEntity, newItem: UserEntity): Boolean {
+    override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
         return oldItem == newItem
     }
 }
