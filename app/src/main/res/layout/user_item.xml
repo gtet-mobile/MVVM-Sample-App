@@ -85,7 +85,7 @@
                         android:textSize="15sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        tools:text=" 5hours ago" />
+                        tools:text=" 5 hours ago" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
