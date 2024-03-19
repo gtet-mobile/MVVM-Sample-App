@@ -10,7 +10,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".ui.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +26,7 @@
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
+                    android:background="#05AEED"
                     android:layout_height="?attr/actionBarSize" />
 
             </com.google.android.material.appbar.AppBarLayout>
