@@ -3,11 +3,12 @@ package com.example.mvvmsampleapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.mvvmsampleapp.model.Data
 import com.example.mvvmsampleapp.repository.UserRepository
+import com.example.mvvmsampleapp.utils.launchOnCoroutineScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.io.IOException
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class UserDetailViewModel @Inject constructor(
         get() = _errorData
 
     fun getUserDetails(id: Int) {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launchOnCoroutineScope {
             try {
                 val response = repository.getUsersDetails(id)
                 if (response.isSuccessful) {
