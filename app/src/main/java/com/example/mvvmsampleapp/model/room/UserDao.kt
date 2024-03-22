@@ -11,7 +11,7 @@ import androidx.room.Query
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertUserData(data: UserEntity)
+    fun insertUserData(data: List<UserEntity>)
 
     @Query("SELECT * FROM userdata")
     fun getUserData(): LiveData<List<UserEntity>>

@@ -3,6 +3,7 @@ package com.example.mvvmsampleapp.adapter
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +13,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.mvvmsampleapp.databinding.UserItemBinding
-import com.example.mvvmsampleapp.model.room.UserEntity
-import com.example.mvvmsampleapp.utils.ViewUtils
-import com.example.mvvmsampleapp.utils.hide
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import androidx.recyclerview.widget.DiffUtil
@@ -57,8 +55,6 @@ class UserPagingAdapter(
             binding.item = user
 
             val requestOptions = RequestOptions()
-            requestOptions.placeholder(ViewUtils.randomDrawbleColor)
-            requestOptions.error(ViewUtils.randomDrawbleColor)
             requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL)
             requestOptions.centerCrop()
 
@@ -72,7 +68,7 @@ class UserPagingAdapter(
                         target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.loader.hide()
+                        binding.loader.visibility=View.GONE
                         return false
                     }
 
@@ -83,7 +79,7 @@ class UserPagingAdapter(
                         dataSource: com.bumptech.glide.load.DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.loader.hide()
+                        binding.loader.visibility=View.GONE
                         return false                    }
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())

@@ -20,10 +20,6 @@ import com.example.mvvmsampleapp.viewmodel.UserDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 @AndroidEntryPoint
 class UserDetailsFragment : Fragment() {
     private val args by navArgs<UserDetailsFragmentArgs>()

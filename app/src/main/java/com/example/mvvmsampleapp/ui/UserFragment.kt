@@ -10,15 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.mvvmsampleapp.adapter.UserAdapter
+import com.example.mvvmsampleapp.adapter.UserPagingAdapter
 import com.example.mvvmsampleapp.databinding.FragmentUserBinding
 import com.example.mvvmsampleapp.model.room.AppDatabase
 import com.example.mvvmsampleapp.repository.UserRepository
 import com.example.mvvmsampleapp.retrofit.ApiHelper
 import com.example.mvvmsampleapp.utils.NetworkConnection
 import com.example.mvvmsampleapp.utils.ViewModelFactory
-import com.example.mvvmsampleapp.utils.hide
 import com.example.mvvmsampleapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,13 +34,18 @@ class UserFragment : Fragment() {
 
     @Inject
     lateinit var database: AppDatabase
+
     @Inject
     lateinit var networkConnection: NetworkConnection
 
     private lateinit var viewModel: UserViewModel
 
     private val adapter = UserAdapter {
-       findNavController().navigate(UserFragmentDirections.actionUserFragmentToDetailFragment(it.id.toString()))
+        findNavController().navigate(UserFragmentDirections.actionUserFragmentToDetailFragment(it.id.toString()))
+    }
+
+    private val userPagingAdapter = UserPagingAdapter {
+        findNavController().navigate(UserFragmentDirections.actionUserFragmentToDetailFragment(it.id.toString()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +53,7 @@ class UserFragment : Fragment() {
         //intialize viewmodel
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserRepository(apiHelper),database)
+            ViewModelFactory(UserRepository(apiHelper), database)
         )[UserViewModel::class.java]
     }
 
@@ -61,20 +67,29 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            viewModel.userResponse.observe(viewLifecycleOwner) {
-                it?.let {
-                    adapter.submitData(it)
-                    binding.progressBar.hide()
-                    binding.recyclerView.adapter = adapter
+        networkConnection.isConnected.observe(viewLifecycleOwner) { internet ->
+            lifecycleScope.launch {
+                if (internet) {
+                    viewModel.pagingData.collectLatest { pagingData ->
+                        binding.progressBar.visibility=View.GONE
+                        binding.recyclerView.adapter = userPagingAdapter
+                        viewModel.insertPagingData(pagingData)
+                        userPagingAdapter.submitData(pagingData)
+                    }
+                } else {
+                    viewModel.userResponse.observe(viewLifecycleOwner) {
+                        it?.let {
+                            binding.progressBar.visibility=View.GONE
+                            binding.recyclerView.adapter = adapter
+                            adapter.submitData(it)
+                        }
+
+                    }
                 }
             }
             viewModel.errorData.observe(viewLifecycleOwner) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
-       networkConnection.isConnected.observe(viewLifecycleOwner){
-           Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-       }
-        }
+    }
 }

@@ -3,6 +3,7 @@ package com.example.mvvmsampleapp.adapter
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,15 +16,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.mvvmsampleapp.databinding.UserItemBinding
 import com.example.mvvmsampleapp.model.Data
-import com.example.mvvmsampleapp.utils.ViewUtils
-import com.example.mvvmsampleapp.utils.hide
-
+import com.example.mvvmsampleapp.model.room.UserEntity
 
 class UserAdapter(
-    val onItemClicked: (Data) -> Unit,
+    val onItemClicked: (UserEntity) -> Unit,
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
-    private val list = mutableListOf<Data>()
+    private val list = mutableListOf<UserEntity>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -37,7 +36,7 @@ class UserAdapter(
     override fun getItemCount(): Int = list.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitData(data: List<Data>) {
+    fun submitData(data: List<UserEntity>) {
         list.clear()
         list.addAll(data)
         notifyDataSetChanged()
@@ -48,15 +47,14 @@ class UserAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("CheckResult")
-        fun bind(data: Data) {
-            binding.item = data
-
+        fun bind(data: UserEntity) {
+            binding.item = Data(id=data.id, email = data.email,
+                lastName = data.lastName, firstName = data.firstName,
+                avatar=data.avatar)
             binding.root.setOnClickListener {
-                onItemClicked(list[adapterPosition])
+                onItemClicked(list[layoutPosition])
             }
             val requestOptions = RequestOptions()
-            requestOptions.placeholder(ViewUtils.randomDrawbleColor)
-            requestOptions.error(ViewUtils.randomDrawbleColor)
             requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL)
             requestOptions.centerCrop()
 
@@ -70,7 +68,7 @@ class UserAdapter(
                         target: Target<Drawable?>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.loader.hide()
+                        binding.loader.visibility= View.GONE
                         return false
                     }
 
@@ -81,7 +79,7 @@ class UserAdapter(
                         dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        binding.loader.hide()
+                        binding.loader.visibility=View.GONE
                         return false
                     }
                 })
