@@ -8,12 +8,16 @@ import com.example.mvvmsampleapp.viewmodel.UserDetailViewModel
 import com.example.mvvmsampleapp.viewmodel.UserViewModel
 
 
-class ViewModelFactory(private val repository: UserRepository, private val database: AppDatabase) :
+class ViewModelFactory(
+    private val repository: UserRepository,
+    private val database: AppDatabase,
+    private val networkConnection: NetworkConnection
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(UserViewModel::class.java) -> {
-                UserViewModel(repository,database) as T
+                UserViewModel(repository,database, networkConnection) as T
             }
             modelClass.isAssignableFrom(UserDetailViewModel::class.java) -> {
                 UserDetailViewModel(repository) as T

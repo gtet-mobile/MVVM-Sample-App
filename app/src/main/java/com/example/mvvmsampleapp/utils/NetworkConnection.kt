@@ -5,11 +5,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class NetworkConnection(private val context: Context) {
 
-    private val _isConnected = MutableLiveData<Boolean>()
-    val isConnected: LiveData<Boolean>
+    private val _isConnected = MutableStateFlow(false)
+    val isConnected: MutableStateFlow<Boolean>
         get() = _isConnected
 
     init {
@@ -22,11 +23,11 @@ class NetworkConnection(private val context: Context) {
         connectivityManager.registerDefaultNetworkCallback(object :
             ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: android.net.Network) {
-                _isConnected.postValue(true)
+                _isConnected.value=true
             }
 
             override fun onLost(network: android.net.Network) {
-                _isConnected.postValue(false)
+                _isConnected.value=false
             }
         })
     }

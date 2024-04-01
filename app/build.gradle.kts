@@ -85,16 +85,18 @@ dependencies {
     //Room Library
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
+    implementation ("androidx.room:room-paging:2.6.1")
+
 
     // pagenation library
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     //unit test cases
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
-    testImplementation ("org.mockito:mockito-core:2.24.5")
+    testImplementation ("org.mockito:mockito-core:2.25.0")
     // required if you want to use Mockito for Android tests
     androidTestImplementation ("org.mockito:mockito-android:2.24.5")
     //noinspection KaptUsageInsteadOfKsp

@@ -15,6 +15,7 @@ import com.example.mvvmsampleapp.databinding.FragmentUserDetailBinding
 import com.example.mvvmsampleapp.model.room.AppDatabase
 import com.example.mvvmsampleapp.repository.UserRepository
 import com.example.mvvmsampleapp.retrofit.ApiHelper
+import com.example.mvvmsampleapp.utils.NetworkConnection
 import com.example.mvvmsampleapp.utils.ViewModelFactory
 import com.example.mvvmsampleapp.viewmodel.UserDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,8 @@ class UserDetailsFragment : Fragment() {
     @Inject
     lateinit var apiHelper: ApiHelper
 
-
+    @Inject
+    lateinit var networkConnection:NetworkConnection
     @Inject
     lateinit var database: AppDatabase
     private val binding get() = _binding!!
@@ -40,7 +42,7 @@ class UserDetailsFragment : Fragment() {
         //intialize viewmodel
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserRepository(apiHelper), database)
+            ViewModelFactory(UserRepository(apiHelper), database, networkConnection)
         )[UserDetailViewModel::class.java]
         lifecycleScope.launch {
             viewModel.getUserDetails(args.id.toInt())
@@ -60,6 +62,9 @@ class UserDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
         lifecycleScope.launch {
             viewModel.userDetailResponse.observe(viewLifecycleOwner) {
                 if (it != null) {
@@ -69,9 +74,7 @@ class UserDetailsFragment : Fragment() {
                     binding.tvTitle.text = it.lastName
                     binding.tvDesc.text = it.email
                     binding.tvWebUrl.text = it.id.toString()
-                    binding.backButton.setOnClickListener {
-                        findNavController().popBackStack()
-                    }
+                    binding.backButton.visibility=View.VISIBLE
                 }
             }
             viewModel.errorData.observe(viewLifecycleOwner) {

@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.mvvmsampleapp.adapter.UserAdapter
 import com.example.mvvmsampleapp.adapter.UserPagingAdapter
 import com.example.mvvmsampleapp.databinding.FragmentUserBinding
 import com.example.mvvmsampleapp.model.room.AppDatabase
@@ -40,10 +38,6 @@ class UserFragment : Fragment() {
 
     private lateinit var viewModel: UserViewModel
 
-    private val adapter = UserAdapter {
-        findNavController().navigate(UserFragmentDirections.actionUserFragmentToDetailFragment(it.id.toString()))
-    }
-
     private val userPagingAdapter = UserPagingAdapter {
         findNavController().navigate(UserFragmentDirections.actionUserFragmentToDetailFragment(it.id.toString()))
     }
@@ -53,7 +47,7 @@ class UserFragment : Fragment() {
         //intialize viewmodel
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(UserRepository(apiHelper), database)
+            ViewModelFactory(UserRepository(apiHelper), database,networkConnection)
         )[UserViewModel::class.java]
     }
 
@@ -67,29 +61,12 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        networkConnection.isConnected.observe(viewLifecycleOwner) { internet ->
             lifecycleScope.launch {
-                if (internet) {
-                    viewModel.pagingData.collectLatest { pagingData ->
-                        binding.progressBar.visibility=View.GONE
-                        binding.recyclerView.adapter = userPagingAdapter
-                        viewModel.insertPagingData(pagingData)
-                        userPagingAdapter.submitData(pagingData)
-                    }
-                } else {
-                    viewModel.userResponse.observe(viewLifecycleOwner) {
-                        it?.let {
-                            binding.progressBar.visibility=View.GONE
-                            binding.recyclerView.adapter = adapter
-                            adapter.submitData(it)
-                        }
-
-                    }
+                viewModel.pagingData.collectLatest { pagingData ->
+                    binding.progressBar.visibility=View.GONE
+                    binding.recyclerView.adapter = userPagingAdapter
+                    userPagingAdapter.submitData(pagingData)
                 }
             }
-            viewModel.errorData.observe(viewLifecycleOwner) {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            }
         }
-    }
 }

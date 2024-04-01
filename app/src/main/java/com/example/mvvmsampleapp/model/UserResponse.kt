@@ -1,6 +1,9 @@
 package com.example.mvvmsampleapp.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -19,19 +22,22 @@ data class UserResponse(
     @SerializedName("total_pages")
     val totalPages: Int
 ):Parcelable
+
+@Entity(tableName = "UserData")
 @Parcelize
 data class Data(
-    @SerializedName("avatar")
-    val avatar: String,
-    @SerializedName("email")
-    val email: String,
-    @SerializedName("first_name")
-    val firstName: String,
     @SerializedName("id")
-    val id: Int,
+    @PrimaryKey val id: Int,
+    @SerializedName("avatar")
+    @ColumnInfo(name = "avatar") val avatar: String,
+    @SerializedName("email")
+    @ColumnInfo(name = "email") val email: String,
+    @SerializedName("first_name")
+    @ColumnInfo(name = "first_name") val firstName: String,
     @SerializedName("last_name")
-    val lastName: String
+    @ColumnInfo(name = "last_name") val lastName: String
 ):Parcelable
+
 @Parcelize
 data class Support(
     val text: String,
