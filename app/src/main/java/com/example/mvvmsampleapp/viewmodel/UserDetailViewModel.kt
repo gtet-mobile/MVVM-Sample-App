@@ -28,6 +28,7 @@ class UserDetailViewModel @Inject constructor(
     fun getUserDetails(id: Int) {
         CoroutineScope(Dispatchers.IO).launchOnCoroutineScope {
             try {
+                //getting data from api using id
                 val response = repository.getUsersDetails(id)
                 if (response.isSuccessful) {
                     val responseBody = response.body()
@@ -40,7 +41,7 @@ class UserDetailViewModel @Inject constructor(
                     _errorData.postValue("Request failed with code ${response.code()}")
                 }
             } catch (e: IOException) {
-                _errorData.postValue("Network error: ${e.message}")
+                _errorData.postValue("No Internet Connection")
             } catch (e: Exception) {
                 _errorData.postValue("An error occurred: ${e.message}")
             }

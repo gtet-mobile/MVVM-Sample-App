@@ -1,7 +1,9 @@
 package com.example.mvvmsampleapp.adapter
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +54,7 @@ class UserPagingAdapter(
 
         @SuppressLint("CheckResult")
         fun bind(user: Data) {
+            Log.d(TAG,"user-adapter $user")
             binding.item = user
 
             val requestOptions = RequestOptions()

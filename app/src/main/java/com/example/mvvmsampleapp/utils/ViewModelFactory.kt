@@ -7,7 +7,6 @@ import com.example.mvvmsampleapp.repository.UserRepository
 import com.example.mvvmsampleapp.viewmodel.UserDetailViewModel
 import com.example.mvvmsampleapp.viewmodel.UserViewModel
 
-
 class ViewModelFactory(
     private val repository: UserRepository,
     private val database: AppDatabase,

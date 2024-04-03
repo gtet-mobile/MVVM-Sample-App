@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.mvvmsampleapp.model.Data
 
-@Database(entities = [UserEntity::class, Data::class], version = 2, exportSchema = false)
+@Database(entities = [Data::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): UserDao
 }
@@ -20,7 +20,8 @@ fun getDatabase(context: Context): AppDatabase {
                 context.applicationContext,
                 AppDatabase::class.java,
                 "database"
-            ).build()
+            ).fallbackToDestructiveMigration()
+             .build()
         }
     }
     INSTANCE.openHelper.writableDatabase

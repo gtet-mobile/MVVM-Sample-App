@@ -66,14 +66,14 @@ class UserDetailsFragment : Fragment() {
             findNavController().popBackStack()
         }
         lifecycleScope.launch {
-            viewModel.userDetailResponse.observe(viewLifecycleOwner) {
-                if (it != null) {
-                    Glide.with(requireContext()).load(it.avatar)
-                        .into(binding.imageView)
-                    binding.tvAuthor.text = it.firstName
-                    binding.tvTitle.text = it.lastName
-                    binding.tvDesc.text = it.email
-                    binding.tvWebUrl.text = it.id.toString()
+            viewModel.userDetailResponse.observe(viewLifecycleOwner) { data->
+                if (data != null) {
+                    Glide.with(requireContext()).load(data.avatar)
+                    .into(binding.imageView)
+                    binding.tvAuthor.text = data.firstName
+                    binding.tvTitle.text = data.lastName
+                    binding.tvDesc.text = data.email
+                    binding.tvWebUrl.text = data.id.toString()
                     binding.backButton.visibility=View.VISIBLE
                 }
             }

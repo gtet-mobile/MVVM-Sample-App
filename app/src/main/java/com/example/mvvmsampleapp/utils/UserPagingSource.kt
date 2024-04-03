@@ -16,6 +16,8 @@ class UserPagingSource(private val repository: UserRepository,private val databa
             val response = repository.getUsers(nextPageNumber)
             Log.d(TAG,"asdfghj $response")
             val data = response.body()?.data ?: emptyList()
+            Log.d(TAG,"data $data")
+            //insert the data in room database
             database.appDao().insertUsers(data)
             LoadResult.Page(
                 data = data,
